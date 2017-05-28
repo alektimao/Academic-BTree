@@ -310,7 +310,7 @@ public class BTree implements BTreeInterface {
         return acho;
     }
 
-    public BTreeNode funsaofilhos(BTreeNode folha)//fundir dois irmaos e transforma em pai
+    public BTreeNode fusaofilhos(BTreeNode folha)//fundir dois irmaos e transforma em pai
     {
         BTreeNode aux = folha.getLig(0); // pega filho da lig 0
         BTreeNode aux1 = folha.getLig(1); // pega filho da da lig 1
@@ -326,47 +326,49 @@ public class BTree implements BTreeInterface {
         return aux;
     }
 
-    public BTreeNode perdePai(BTreeNode folha)//Junta dois filhos e elimina o Pai
+    public BTreeNode fusaoPai(BTreeNode folha)//Junta dois filhos e elimina o Pai
     { // so executa quando a raiz possui um elemento
         BTreeNode aux = folha.getLig(0); // recebe filho da esquerda da (FOLHA)
-        BTreeNode aux1 = perdeFilho(folha.getvLig(1), aux);
+        BTreeNode aux1 = retiraFilho(folha.getLig(1), aux);
         int i = 0;
 
-        for (i = 0; i < aux1.getTL(); i++) {
-            aux.setvLig(aux.getTL(), aux1.getvLig(i));
-            aux.setvInfo(aux.getTL(), aux1.getvInfo(i));
-            aux.setvPos(aux.getTL(), aux1.getvPos(i));
-            aux.setTL(aux.getTL() + 1);
+        for (i = 0; i < aux1.getTl(); i++) {
+            aux.setLig(aux1.getLig(i), aux.getTl());
+            aux.setInfo(aux.getTl(), aux1.getInfo(i));
+            aux.setPos(aux.getTl(), aux1.getPos(i));
+            aux.setTl(aux.getTl() + 1);
         }
-        aux.setvLig(aux.getTL(), aux1.getvLig(i));
+        aux.setLig(aux1.getLig(i), aux.getTl());
         return aux;
     }
 
-    public BTreeNode perdeFilho(BTreeNode folha, BTreeNode folha2) {
-        No aux = folha.getvLig(0); // filho da esquerda
-        No aux1 = folha.getvLig(1); // filho da direita
-        int i = 0, auxinfo = aux.getvInfo(0), auxpos = aux.getvPos(0); // guarda o primeiro elemento do NO e a posicao
+    public BTreeNode retiraFilho(BTreeNode folha, BTreeNode folha2) {
+        BTreeNode aux = folha.getLig(0); // filho da esquerda
+        BTreeNode aux1 = folha.getLig(1); // filho da direita
+        int i = 0, auxinfo = aux.getInfo(0), auxpos = aux.getPos(0); // guarda o primeiro elemento do NO e a posicao
 
-        for (i = 0; i < aux.getTL() - 1; i++) {
+        for (i = 0; i < aux.getTl() - 1; i++) {
 
-            aux.setvInfo(i, aux.getvInfo(i + 1)); // remaneja as informações
-            aux.setvPos(i, aux.getvPos(i + 1));   // remenaje as posições
+            aux.setInfo(i, aux.getInfo(i + 1)); // remaneja as informações
+            aux.setPos(i, aux.getPos(i + 1));   // remenaje as posições
         }
 
-        aux.setvInfo(i, folha.getvInfo(0));
-        aux.setvPos(i, folha.getvPos(0));
+        aux.setInfo(i, folha.getInfo(0));
+        aux.setPos(i, folha.getPos(0));
 
-        for (i = 0; i < aux1.getTL(); i++) {
-            aux.setvInfo(aux.getTL(), aux1.getvInfo(i));
-            aux.setvPos(aux.getTL(), aux1.getvPos(i));
-            aux.setTL(aux.getTL() + 1);
+        for (i = 0; i < aux1.getTl(); i++) {
+            aux.setInfo(aux.getTl(), aux1.getInfo(i));
+            aux.setPos(aux.getTl(), aux1.getPos(i));
+            aux.setTl(aux.getTl() + 1);
         }
 
-        folha.setvLig(1, aux);
-        folha.setvLig(0, viz.getvLig(viz.getTL()));
-        folha.setvInfo(0, auxinfo);
-        folha.setvPos(0, auxpos);
+        folha.setLig(aux, 1);
+        folha.setLig(folha2.getLig(folha2.getTl()), 0);
+        folha.setInfo(0, auxinfo);
+        folha.setPos(0, auxpos);
 
         return folha;
     }
+
+  
 }
