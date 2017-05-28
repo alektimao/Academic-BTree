@@ -72,7 +72,7 @@ public class BTree implements BTreeInterface {
             aux2.setLig(folha.getLig(i), i - (N + 1));
         }
 
-        aux2.setLig(folha.getLig(2 * N + 1),N);
+        aux2.setLig(folha.getLig(2 * N + 1), N);
         aux2.setTl(N);
 
         if (folha == pai) {
@@ -164,5 +164,209 @@ public class BTree implements BTreeInterface {
             temp = fila.remove();
 
         }
+    }
+
+    // Remover
+    public void remover(BTreeNode no, int info) {
+        int i = 0;
+
+        while (info != no.getInfo(i) && i < no.getTl() - 1) // procura posiçao do elemento
+        {
+            i++;
+        }
+
+        for (int k = i; k < no.getTl() - 1; k++) {
+            no.setInfo(k, no.getInfo(k + 1)); // joga informaçao pra frente
+            no.setPos(k, no.getPos(k + 1));   // muda posiçao
+        }
+        no.setTl(no.getTl() - 1);
+    }
+
+    public BTreeNode FusaoFilhoPai(BTreeNode pai)//fundi filhos com seu pai
+    {
+        BTreeNode aux = pai.getLig(0);
+        BTreeNode aux1 = pai.getLig(1);
+        int i;
+
+        aux.setInfo(aux.getTl(), pai.getInfo(0));
+        aux.setPos(aux.getTl(), pai.getPos(0));  // foi mudado
+        aux.setTl(aux.getTl() + 1);
+
+        for (i = 0; i < aux1.getTl(); i++) {
+            aux.setLig(aux1.getLig(i), aux.getTl());
+            aux.setInfo(aux.getTl(), aux1.getInfo(i));
+            aux.setPos(aux.getTl(), aux1.getPos(i));
+            aux.setTl(aux.getTl() + 1);
+        }
+        aux.setLig(aux1.getLig(i), aux.getTl());
+        return aux;
+    }
+
+    public void fusaoRaiz(BTreeNode folha)//fusao da raiz quando fica sozinha
+    {
+        int j = 0, pos = 0;
+        BTreeNode i, aux, pai, avo;
+        pai = localizaPai(folha, folha.getInfo(0));
+        i = navegaAteFolha(folha.getInfo(0));
+        if (pai == raiz) {
+            if (pai.getTl() > 1) {
+                if (i.getTl() == 0) {
+                    fusao(i.getPos(pos), folha, pai);
+                } else {
+                    fusao(i.getPos(pos - 1), folha, pai);
+                }
+            } else {
+                aux = FusaoFilhoPai(pai);
+                raiz = aux;
+            }
+        }
+    }
+
+    public void fusao(int i, BTreeNode folha, BTreeNode pai)//segunda possibilidade do power point
+    {
+        BTreeNode aux = pai.getLig(i + 1);
+        int auxinfo, auxpos;
+
+        auxinfo = pai.getInfo(i);
+        auxpos = pai.getPos(i);
+        remover(pai, auxinfo);
+
+        for (int p = i + 1; p <= pai.getTl(); p++) {
+            pai.setLig(pai.getLig(p + 1), p);
+        }
+        insere(auxinfo, auxpos);
+
+        for (int p = 0; p < aux.getTl(); p++) {
+            insere(aux.getInfo(p), aux.getPos(p));
+        }
+
+        if (pai.getTl() < N && pai != raiz) // fusao de vizinho com vizinho
+        {
+            fusaoRaiz(pai);
+        }
+
+    }
+
+    //Pegar da direita
+    public boolean PegarDireita(int info, int i, BTreeNode no, BTreeNode raiz) {
+        BTreeNode aux = raiz.getLig(i + 1);
+        int auxinfo, auxpos, infopai, pospai;
+        //verificaçao de mais de N registros na direita
+        if (raiz.getLig(i + 1) != null && raiz.getLig(i + 1).getTl() > N) {
+            auxinfo = aux.getInfo(0);//pega menor valor eprestado
+            auxpos = aux.getPos(0);
+            infopai = raiz.getInfo(i);
+            pospai = raiz.getPos(i);
+
+            remover(aux, aux.getInfo(0)); // utiliza Remove
+            raiz.setInfo(i, auxinfo);//coloca os valores no resgistro
+            raiz.setPos(i, auxpos);
+            insere(infopai, pospai);
+            return true;
+        }
+        return false;
+    }
+
+    //Pegar esquerda
+    public boolean pegaresquerda(int info, int i, BTreeNode no, BTreeNode raiz) {
+        BTreeNode aux = raiz.getLig(i);
+        int auxinfopai, auxpospai, auxinfo, auxpos;
+
+        if (raiz.getLig(i) != null && raiz.getLig(i).getTl() > N) {
+            auxinfo = aux.getInfo(aux.getTl() - 1);
+            auxpos = aux.getPos(aux.getTl() - 1);
+            auxinfopai = raiz.getInfo(i);
+            auxpospai = raiz.getPos(i);
+
+            remover(aux, aux.getInfo(aux.getTl() - 1));
+            raiz.setInfo(i, auxinfo);
+            raiz.setPos(i, auxpos);
+            insere(auxinfopai, auxpospai);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean acharelemento(int info)//verifica se o elemento existe
+    {
+        BTreeNode aux = raiz;
+        int i = 0;
+        boolean acho = false;
+        for (int pos = 0; pos < aux.getTl(); pos++) {
+            if (info == aux.getInfo(pos)) {
+                acho = true;
+            }
+        }
+        if (!acho) {
+            aux = navegaAteFolha(info);
+            while (i < aux.getTl()) {
+                if (info == aux.getInfo(i)) {
+                    acho = true;
+                }
+                i++;
+            }
+        }
+        return acho;
+    }
+
+    public BTreeNode funsaofilhos(BTreeNode folha)//fundir dois irmaos e transforma em pai
+    {
+        BTreeNode aux = folha.getLig(0); // pega filho da lig 0
+        BTreeNode aux1 = folha.getLig(1); // pega filho da da lig 1
+        int i = 0;
+
+        for (i = 0; i < aux1.getTl(); i++) {
+            aux.setLig(aux1.getLig(i), aux.getTl());
+            aux.setInfo(aux.getTl(), aux1.getInfo(i));
+            aux.setPos(aux.getTl(), aux1.getPos(i));
+            aux.setTl(aux.getTl() + 1);
+        }
+        aux.setLig(aux1.getLig(i), aux.getTl());
+        return aux;
+    }
+
+    public BTreeNode perdePai(BTreeNode folha)//Junta dois filhos e elimina o Pai
+    { // so executa quando a raiz possui um elemento
+        BTreeNode aux = folha.getLig(0); // recebe filho da esquerda da (FOLHA)
+        BTreeNode aux1 = perdeFilho(folha.getvLig(1), aux);
+        int i = 0;
+
+        for (i = 0; i < aux1.getTL(); i++) {
+            aux.setvLig(aux.getTL(), aux1.getvLig(i));
+            aux.setvInfo(aux.getTL(), aux1.getvInfo(i));
+            aux.setvPos(aux.getTL(), aux1.getvPos(i));
+            aux.setTL(aux.getTL() + 1);
+        }
+        aux.setvLig(aux.getTL(), aux1.getvLig(i));
+        return aux;
+    }
+
+    public BTreeNode perdeFilho(BTreeNode folha, BTreeNode folha2) {
+        No aux = folha.getvLig(0); // filho da esquerda
+        No aux1 = folha.getvLig(1); // filho da direita
+        int i = 0, auxinfo = aux.getvInfo(0), auxpos = aux.getvPos(0); // guarda o primeiro elemento do NO e a posicao
+
+        for (i = 0; i < aux.getTL() - 1; i++) {
+
+            aux.setvInfo(i, aux.getvInfo(i + 1)); // remaneja as informações
+            aux.setvPos(i, aux.getvPos(i + 1));   // remenaje as posições
+        }
+
+        aux.setvInfo(i, folha.getvInfo(0));
+        aux.setvPos(i, folha.getvPos(0));
+
+        for (i = 0; i < aux1.getTL(); i++) {
+            aux.setvInfo(aux.getTL(), aux1.getvInfo(i));
+            aux.setvPos(aux.getTL(), aux1.getvPos(i));
+            aux.setTL(aux.getTL() + 1);
+        }
+
+        folha.setvLig(1, aux);
+        folha.setvLig(0, viz.getvLig(viz.getTL()));
+        folha.setvInfo(0, auxinfo);
+        folha.setvPos(0, auxpos);
+
+        return folha;
     }
 }
