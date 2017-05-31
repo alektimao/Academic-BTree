@@ -49,7 +49,11 @@ public class BTree implements BTreeInterface {
 
         return aux;
     }
-
+    public BTreeNode RecNavegaAteNo(BTreeNode folha,int info)
+    {
+        BTreeNode aux=folha;
+        
+    }
     public void split(BTreeNode folha, BTreeNode pai, int info) {
 
         BTreeNode aux1 = new BTreeNode();
@@ -167,41 +171,6 @@ public class BTree implements BTreeInterface {
     }
 
     // Remover
-    public void remanejar(BTreeNode no, int info) {
-        int i = 0;
-
-        while (info != no.getInfo(i) && i < no.getTl() - 1) // procura posiçao do elemento
-        {
-            i++;
-        }
-
-        for (int k = i; k < no.getTl() - 1; k++) {
-            no.setInfo(k, no.getInfo(k + 1)); // joga informaçao pra frente
-            no.setPos(k, no.getPos(k + 1));   // muda posiçao
-        }
-        no.setTl(no.getTl() - 1);
-    }
-
-    public BTreeNode buscaNo(int info) {
-        BTreeNode p = raiz;
-        BTreeNode aux = null;
-        int i = 0, j;
-        boolean ct = false;
-        while (!ct) {
-            for (i = 0; i < p.getTl(); i++) {
-                if (info == p.getInfo(i)) {
-                    ct = true;
-                }
-            }
-            if (!ct) {
-                j = aux.procuraPosicao(info);
-                p = p.getLig(j);
-            }
-        }
-
-        return p;
-    }
-
     public BTreeNode FusaoFilhoPai(BTreeNode pai)//fundi filhos com seu pai
     {
         BTreeNode aux = pai.getLig(0);
@@ -322,7 +291,7 @@ public class BTree implements BTreeInterface {
         {                  // Apaga da folha e joga para a raiz  
             auxinfo = aux.getInfo(aux.getTl() - 1);
             auxpos = aux.getPos(aux.getTl() - 1);
-            remanejar(aux, aux.getInfo(aux.getTl() - 1));
+            aux.removeInfo(aux.procuraPosicao(aux.getInfo(aux.getTl() - 1)));
             folha.setInfo(pos, auxinfo);
             folha.setPos(pos, auxpos);
             return true;
@@ -337,34 +306,12 @@ public class BTree implements BTreeInterface {
         {
             auxinfo = aux.getInfo(0);
             auxpos = aux.getPos(0);
-            remanejar(aux, aux.getInfo(0));
+            aux.removeInfo(aux.procuraPosicao(aux.getInfo(0)));
             folha.setInfo(pos, auxinfo);
             folha.setPos(pos, auxpos);
             return true;
         }
         return false;
-    }
-
-    public boolean acharelemento(int info)//verifica se o elemento existe
-    {
-        BTreeNode aux = raiz;
-        int i = 0;
-        boolean acho = false;
-        for (int pos = 0; pos < aux.getTl(); pos++) {
-            if (info == aux.getInfo(pos)) {
-                acho = true;
-            }
-        }
-        if (!acho) {
-            aux = navegaAteFolha(info);
-            while (i < aux.getTl()) {
-                if (info == aux.getInfo(i)) {
-                    acho = true;
-                }
-                i++;
-            }
-        }
-        return acho;
     }
 
     public BTreeNode fusaofilhos(BTreeNode folha)//fundir dois irmaos e transforma em pai
@@ -464,38 +411,33 @@ public class BTree implements BTreeInterface {
         BTreeNode folha = null, pai = null, aux1 = null;
         int i = 0, pos = 0, aux = 0;
         boolean ok = false;
-        //A Raiz é o unico elemento no qual pode fica apenas 1 item !
-        if (raiz == null) // Ou caso raiz igual a null
+        if (raiz == null) // raiz igual a null 
         {
             System.out.println("A árvore não possui elementos");
         } else {
-            if (acharelemento(info))// Valida para saber se o nó informado existe!
+            folha = navegaAteFolha(info);
+            if (folha != null)// Valida para saber se o nó informado existe!
             {
-                folha = buscaNo(info);
-                if (folha.getLig(0) == null)//Valida para saber se é uma folha, pois caso não terá procedimento diferentes
+                if (folha.isFolha())//Valida para saber se é uma folha, pois caso não terá procedimento diferentes
                 {
                     if (folha == raiz) // A folha é tbm a raiz?
                     {
-
-                        remanejar(folha, info); // Então passa por parametro a folha e o elemento a excluir. fim!
+                        folha.removeInfo(folha.procuraPosicao(info)); // Então passa por parametro a folha e o elemento a excluir. fim!
                         ok = true; // Fim
                     } else // Caso a folha não for igual a Raiz
                     {
                         pai = localizaPai(folha, info); // Encontra o Pai da Folha
-                        remanejar(folha, info); // E Apaga a Info
+                        folha.removeInfo(folha.procuraPosicao(info)); // E Apaga a Info
 
                         // (!) 3.Se a folha continuar com o número mínimo de chaves, fim.
-                        if (folha.getTl() < N)// Caso o N fique maior que o TL tem que emprestar.
+                        if (folha.getTl() < N)// Caso o TL fique menor que o N tem que emprestar.
                         {
-
                             i = aux1.procuraPosicao(info); // Procura posição da folha para emprestar !
-
-                            if (i == 0)// É a folha mais a direita
+                            if (i == 0)// quer dizer que ele so tem vizinho a direita
                             {
                                 ok = PegarDireita(info, i, folha, pai);
                             } else// É a folha mais a esquerda
-                            {
-                                if (i > 0 && i < pai.getTl())// É uma folha do meio
+                             if (i > 0 && i < pai.getTl())// É uma folha do meio
                                 {
                                     ok = pegaresquerda(info, i - 1, folha, pai);//Tenta da esquerda
                                     if (!ok)//Não conseguiu
@@ -506,7 +448,6 @@ public class BTree implements BTreeInterface {
                                 {
                                     ok = pegaresquerda(info, i - 1, folha, pai);//Tenta da esquerda
                                 }
-                            }
                             if (!ok)//Caso não tenha conseguido emprestar das folhas vizinhas!
                             {
                                 System.out.println("Não e possivel emprestar ");
@@ -518,9 +459,12 @@ public class BTree implements BTreeInterface {
                                     ok = true;
                                 }
                             }
+                        } else {
+                            ok = true;
                         }
+
                     }
-                    if (ok || info == 0) {
+                    if (ok) {
                         System.out.println("Elemento removido.");
                     } else {
                         System.out.println("Falha na remoção.");
@@ -535,15 +479,14 @@ public class BTree implements BTreeInterface {
                         if (folha != raiz)//A Info nao esta na raiz
                         {
                             pai = localizaPai(folha, info);
-                            remanejar(folha, info); // 2.Elimine a chave da folha.
+                            folha.removeInfo(folha.procuraPosicao(info)); // 2.Elimine a chave da folha.
                             i = aux1.procuraPosicao(info);
                             fusaoRaiz(pai);
                             ok = true;
                         } else//a info esta na raiz
-                        {
-                            // 4. A folha tem uma chave a menos que o mínimo. Verifique as páginas irmãs da esquerda e direita
-                            if (folha.getTl() == N - 1) {
-                                remanejar(folha, info); // 2. Elimine a chave da folha.
+                        // 4. A folha tem uma chave a menos que o mínimo. Verifique as páginas irmãs da esquerda e direita
+                         if (folha.getTl() == N - 1) {
+                                folha.removeInfo(folha.procuraPosicao(info)); // 2. Elimine a chave da folha.
                                 BTreeNode prov = fusaofilhos(folha); // quando o NÓ está sendo excluido está na raiz
                                 raiz = prov; // raiz é atualizada
                                 ok = true;
@@ -551,7 +494,6 @@ public class BTree implements BTreeInterface {
                             } else {
                                 ok = ExcluirNo(folha, info);
                             }
-                        }
 
                     }
 
@@ -566,7 +508,6 @@ public class BTree implements BTreeInterface {
             {
                 System.out.println("O elemento não existe.");
             }
-
         }
     }
 }
