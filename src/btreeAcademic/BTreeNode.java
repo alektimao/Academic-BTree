@@ -30,7 +30,7 @@ public class BTreeNode implements BTreeInterface {
         this.vPos[0] = posArq;
         this.tl = 1;
     }
-    
+
     public int procuraPosicao(int info) {
 
         int i;
@@ -47,6 +47,15 @@ public class BTreeNode implements BTreeInterface {
             vPos[i] = vPos[i - 1];
             vLig[i] = vLig[i - 1];
         }
+    }
+
+    void removeInfo(int pos) {
+        for (int i = pos; i < tl; i++) {
+            vInfo[i] = vInfo[i + 1];
+            vPos[i] = vPos[i + 1];
+            vLig[i] = vLig[i + 1];
+        }
+        vLig[tl] = vLig[tl + 1];
     }
 
     public int getInfo(int pos) {
@@ -79,6 +88,14 @@ public class BTreeNode implements BTreeInterface {
 
     public void setTl(int tl) {
         this.tl = tl;
+    }
+
+    public boolean isFolha() {
+        boolean notfolha = false;
+        for (int i = 0; i > tl + 1 && !notfolha; i++) {
+            notfolha = vLig[i] != null;
+        }
+        return !notfolha;
     }
 
 }

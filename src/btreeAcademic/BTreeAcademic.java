@@ -26,7 +26,9 @@ public class BTreeAcademic {
         tree.insere(25);
         tree.insere(19);
         tree.insere(20);
+        tree.remover(7);
         tree.inOrden();
+        System.out.println();
         tree.exibe();
     }
     
