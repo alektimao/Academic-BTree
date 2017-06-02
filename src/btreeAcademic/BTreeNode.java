@@ -56,6 +56,7 @@ public class BTreeNode implements BTreeInterface {
             vLig[i] = vLig[i + 1];
         }
         vLig[tl] = vLig[tl + 1];
+        tl--;
     }
 
     public int getInfo(int pos) {

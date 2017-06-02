@@ -49,11 +49,11 @@ public class BTree implements BTreeInterface {
 
         return aux;
     }
-    public BTreeNode RecNavegaAteNo(BTreeNode folha,int info)
-    {
-        BTreeNode aux=folha;
-        
-    }
+//    public BTreeNode RecNavegaAteNo(BTreeNode folha,int info)
+//    {
+//        BTreeNode aux=folha;
+//        
+//    }
     public void split(BTreeNode folha, BTreeNode pai, int info) {
 
         BTreeNode aux1 = new BTreeNode();
@@ -431,7 +431,7 @@ public class BTree implements BTreeInterface {
 
                         // (!) 3.Se a folha continuar com o número mínimo de chaves, fim.
                         if (folha.getTl() < N)// Caso o TL fique menor que o N tem que emprestar.
-                        {
+                        {   aux1=folha;
                             i = aux1.procuraPosicao(info); // Procura posição da folha para emprestar !
                             if (i == 0)// quer dizer que ele so tem vizinho a direita
                             {
@@ -450,7 +450,7 @@ public class BTree implements BTreeInterface {
                                 }
                             if (!ok)//Caso não tenha conseguido emprestar das folhas vizinhas!
                             {
-                                System.out.println("Não e possivel emprestar ");
+                                System.out.println("fazer fusao nao da pra empresta");
                                 if (i == 0) {
                                     fusao(i, folha, pai); // Ocorre a Fusão !
                                     ok = true;
@@ -465,9 +465,9 @@ public class BTree implements BTreeInterface {
 
                     }
                     if (ok) {
-                        System.out.println("Elemento removido.");
+                        System.out.println("removido.");
                     } else {
-                        System.out.println("Falha na remoção.");
+                        System.out.println("nao remoção.");
                     }
 
                 } else//Caso for um nó

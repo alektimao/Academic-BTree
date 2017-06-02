@@ -16,17 +16,19 @@ public class BTreeAcademic {
      */
     public static void main(String[] args) {
         BTree tree = new BTree();
-        tree.insere(1);
-        tree.insere(4);
-        tree.insere(7);
         tree.insere(10);
-        tree.insere(17);
-        tree.insere(21);
-        tree.insere(31);
-        tree.insere(25);
-        tree.insere(19);
         tree.insere(20);
-        tree.remover(7);
+        tree.insere(30);
+        tree.insere(40);
+        tree.insere(50);
+        tree.insere(60);
+        tree.insere(70);
+        tree.insere(80);
+        tree.insere(90);
+        tree.insere(100);
+        tree.insere(110);
+        tree.insere(120);
+        //tree.remover(20);
         tree.inOrden();
         System.out.println();
         tree.exibe();
