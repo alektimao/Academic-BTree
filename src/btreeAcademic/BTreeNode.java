@@ -50,12 +50,12 @@ public class BTreeNode implements BTreeInterface {
     }
 
     void removeInfo(int pos) {
-        for (int i = pos; i < tl; i++) {
+        for (int i = pos; i < tl-1; i++) {
             vInfo[i] = vInfo[i + 1];
             vPos[i] = vPos[i + 1];
             vLig[i] = vLig[i + 1];
         }
-        vLig[tl] = vLig[tl + 1];
+        vLig[tl-1] = vLig[tl];
         tl--;
     }
 
