@@ -19,7 +19,7 @@ public class BTreeAcademic {
         
         
         for (int i = 0; i < 100; i++) {
-            tree.insere((int) (Math.random() * (100 - 0)) + 0);
+            tree.insere((int) (Math.random() * (400 - 0)) + 0);
             
         }
 //        tree.insere(10);
