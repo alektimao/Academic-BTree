@@ -86,11 +86,11 @@ public class BPlusTree implements BPlusTreeInterface {
         BPlusTreeNode node1 = new BPlusTreeNode();
         BPlusTreeNode node2 = new BPlusTreeNode();
 
-        if (folha.getLig(0) == null) // quando é folha
+        if (folha.getLig(0) == null) 
         {
-            poscentro = Math.round((float) (N - 1) / 2); //calculo
+            poscentro = Math.round((float) (N - 1) / 2); 
 
-            for (int i = 0; i < poscentro; i++) //preenche a cx1
+            for (int i = 0; i < poscentro; i++) //enche no1 de informaçao
             {
                 node1.setInfo(i, folha.getInfo(i));
                 node1.setLig(i, folha.getLig(i));
@@ -98,7 +98,7 @@ public class BPlusTree implements BPlusTreeInterface {
             node1.setLig(poscentro, folha.getLig(poscentro));
             node1.setTl(poscentro);
 
-            for (int i = poscentro; i < folha.getTl(); i++) //preenche a cx2
+            for (int i = poscentro; i < folha.getTl(); i++) //enche no2 de informaçao
             {
                 node2.setInfo(i - poscentro, folha.getInfo(i));
                 node2.setLig(i - poscentro, folha.getLig(i));
@@ -106,7 +106,7 @@ public class BPlusTree implements BPlusTreeInterface {
             node2.setLig(folha.getTl() - poscentro, folha.getLig(folha.getTl()));
             node2.setTl(folha.getTl() - poscentro);
 
-            //junta as duas caixas pelo ant e prox
+            //junta a ligaçao dos dois nos pelo ant e prox
             node1.setProx(node2);
             node2.setAnt(node1);
 
