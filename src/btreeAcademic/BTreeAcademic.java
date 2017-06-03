@@ -30,6 +30,7 @@ public class BTreeAcademic {
         tree.insere(120);
         //tree.remover(20);
         tree.inOrden();
+        BTreePrinter.treePrinter(tree.getRaiz());
         System.out.println();
         tree.exibe();
     }

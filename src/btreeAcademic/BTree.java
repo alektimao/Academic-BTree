@@ -510,4 +510,10 @@ public class BTree implements BTreeInterface {
             }
         }
     }
+
+    public BTreeNode getRaiz() {
+        return raiz;
+    }
+    
+    
 }
