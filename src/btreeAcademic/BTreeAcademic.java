@@ -18,7 +18,7 @@ public class BTreeAcademic {
         BTree tree = new BTree();
         
         
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 100; i++) {
             tree.insere((int) (Math.random() * (100 - 0)) + 0);
             
         }
