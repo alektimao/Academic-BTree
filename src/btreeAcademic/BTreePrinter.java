@@ -23,11 +23,14 @@ public class BTreePrinter implements BTreeInterface{
         depth += c;
         depth += " ";
         depth += " ";
+        depth += " ";
+        depth += " ";
+        depth += " ";
     }
 
     private static void TreePrinterPop() {
         if (depth != null && depth.length() > 0) {
-            depth = depth.substring(0, depth.length() - 4);
+            depth = depth.substring(0, depth.length() - 7);
         }
     }
 
@@ -39,7 +42,7 @@ public class BTreePrinter implements BTreeInterface{
         System.out.println(str+")");
         
 
-        for (int i = 0; i < subroot.getTl()-1 && subroot.getLig(subroot.getTl()) != null; i++) {
+        for (int i = 0; i < subroot.getTl() && subroot.getLig(i) != null; i++) {
             System.out.print(depth+" `-(lig-"+i+")--");
             treePrinterPush('|');
             treePrinterRec(subroot.getLig(i));

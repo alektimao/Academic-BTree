@@ -16,23 +16,29 @@ public class BTreeAcademic {
      */
     public static void main(String[] args) {
         BTree tree = new BTree();
-        tree.insere(10);
-        tree.insere(20);
-        tree.insere(30);
-        tree.insere(40);
-        tree.insere(50);
-        tree.insere(60);
-        tree.insere(70);
-        tree.insere(80);
-        tree.insere(90);
-        tree.insere(100);
-        tree.insere(110);
-        tree.insere(120);
-        //tree.remover(20);
-        tree.inOrden();
+        
+        
+        for (int i = 0; i < 25; i++) {
+            tree.insere((int) (Math.random() * (100 - 0)) + 0);
+            
+        }
+//        tree.insere(10);
+//        tree.insere(20);
+//        tree.insere(30);
+//        tree.insere(40);
+//        tree.insere(50);
+//        tree.insere(60);
+//        tree.insere(70);
+//        tree.insere(80);
+//        tree.insere(90);
+//        tree.insere(100);
+//        tree.insere(110);
+//        tree.insere(120);
+//        //tree.remover(20);
+        //tree.inOrden();
         BTreePrinter.treePrinter(tree.getRaiz());
         System.out.println();
-        tree.exibe();
+        //tree.exibe();
     }
     
 }
