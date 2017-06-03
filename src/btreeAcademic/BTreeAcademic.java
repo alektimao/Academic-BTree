@@ -85,19 +85,6 @@ public class BTreeAcademic {
                 cmdOk = true;
             } else if (cmdline.equals("SHOW BTREE PRE ODER")) {
 
-            } else if (cmdline.contains("INSERT AUTO BPLUSTREE ")) {
-                cmdline = cmdline.replace("INSERT AUTO BPLUSTREE ", "");
-                try {
-                    num = Integer.parseInt(cmdline);
-                    for (int i = 0; i < num; i++) {
-                        bplustree.insere((int) (Math.random() * (400 - 0)) + 0);
-                    }
-                    cmdOk = true;
-                } catch (NumberFormatException e) {
-
-                    System.out.println("--->Error in argument");
-                }
-
             } else if (cmdline.contains("INSERT AUTO BTREE ")) {
                 cmdline = cmdline.replace("INSERT AUTO BTREE ", "");
                 try {
@@ -110,7 +97,20 @@ public class BTreeAcademic {
 
                     System.out.println("--->Error in argument");
                 }
-            } else if (cmdline.equals("HELP")) {
+            } else if (cmdline.contains("INSERT AUTO BPLUSTREE ")) {
+                cmdline = cmdline.replace("INSERT AUTO BPLUSTREE ", "");
+                try {
+                    num = Integer.parseInt(cmdline);
+                    for (int i = 0; i < num; i++) {
+                        bplustree.insere((int) (Math.random() * (400 - 0)) + 0);
+                    }
+                    cmdOk = true;
+                } catch (NumberFormatException e) {
+
+                    System.out.println("--->Error in argument");
+                }
+            }
+            if (cmdline.equals("HELP")) {
                 cliTextHead();
             }
 
@@ -151,7 +151,7 @@ public class BTreeAcademic {
         System.out.println("*  INSERT INTO BPLUSTREE [VALUE]");
         System.out.println("*  SHOW BPLUSTREE");
         System.out.println("*  SHOW BPLUSTREE PRE ODER");
-        System.out.println("*  INSERT AUTO BPLUSTREE AUTO [number]");
+        System.out.println("*  INSERT AUTO BPLUSTREE [number]");
         System.out.println("*  ");
         System.out.println("*  INSERT AUTO BTREE BPLUSTREE [number]");
         System.out.println("*  ");
