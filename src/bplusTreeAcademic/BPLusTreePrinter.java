@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package btreeAcademic;
+package bplusTreeAcademic;
+
 
 /**
  *
  * @author titan
  */
-public class BTreePrinter implements BTreeInterface{
+public class BPLusTreePrinter implements BPlusTreeInterface{
 
     private static String depth;
 
@@ -33,9 +34,9 @@ public class BTreePrinter implements BTreeInterface{
         }
     }
 
-    private static void treePrinterRec(BTreeNode subroot) {
+    private static void treePrinterRec(BPlusTreeNode subroot) {
         String str = "(|";
-        for (int i = 0; i < 2*N; i++) {
+        for (int i = 0; i < NINFO; i++) {
             str += String.format("%3s|", i < subroot.getTl()?""+subroot.getInfo(i):"   ");  
         }
         System.out.println(str+")");
@@ -56,7 +57,7 @@ public class BTreePrinter implements BTreeInterface{
 
     }
 
-    static void treePrinter(BTreeNode root) {
+    public static void treePrinter(BPlusTreeNode root) {
 
         depth = "";
         System.out.println();

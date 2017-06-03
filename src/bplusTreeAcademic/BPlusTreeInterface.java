@@ -10,6 +10,6 @@ package bplusTreeAcademic;
  * @author titan
  */
 public interface BPlusTreeInterface {
-    final int N = 4;
+    final int N = 5;
     final int NINFO = N - 1;
 }
