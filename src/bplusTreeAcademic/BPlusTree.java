@@ -81,83 +81,83 @@ public class BPlusTree implements BPlusTreeInterface {
     }
 
     private void split(BPlusTreeNode folha, BPlusTreeNode pai, int info) {
-        int calculoDistribuicao, pospai = 0, pos;
-        BPlusTreeNode vizinhoEsq, vizinhoDir;
-        BPlusTreeNode cx1 = new BPlusTreeNode();
-        BPlusTreeNode cx2 = new BPlusTreeNode();
+        int poscentro, pospai = 0, pos;
+        BPlusTreeNode leftNode, rightNode;
+        BPlusTreeNode node1 = new BPlusTreeNode();
+        BPlusTreeNode node2 = new BPlusTreeNode();
 
         if (folha.getLig(0) == null) // quando é folha
         {
-            calculoDistribuicao = Math.round((float) (N - 1) / 2); //calculo
+            poscentro = Math.round((float) (N - 1) / 2); //calculo
 
-            for (int i = 0; i < calculoDistribuicao; i++) //preenche a cx1
+            for (int i = 0; i < poscentro; i++) //preenche a cx1
             {
-                cx1.setInfo(i, folha.getInfo(i));
-                cx1.setLig(i, folha.getLig(i));
+                node1.setInfo(i, folha.getInfo(i));
+                node1.setLig(i, folha.getLig(i));
             }
-            cx1.setLig(calculoDistribuicao, folha.getLig(calculoDistribuicao));
-            cx1.setTl(calculoDistribuicao);
+            node1.setLig(poscentro, folha.getLig(poscentro));
+            node1.setTl(poscentro);
 
-            for (int i = calculoDistribuicao; i < folha.getTl(); i++) //preenche a cx2
+            for (int i = poscentro; i < folha.getTl(); i++) //preenche a cx2
             {
-                cx2.setInfo(i - calculoDistribuicao, folha.getInfo(i));
-                cx2.setLig(i - calculoDistribuicao, folha.getLig(i));
+                node2.setInfo(i - poscentro, folha.getInfo(i));
+                node2.setLig(i - poscentro, folha.getLig(i));
             }
-            cx2.setLig(folha.getTl() - calculoDistribuicao, folha.getLig(folha.getTl()));
-            cx2.setTl(folha.getTl() - calculoDistribuicao);
+            node2.setLig(folha.getTl() - poscentro, folha.getLig(folha.getTl()));
+            node2.setTl(folha.getTl() - poscentro);
 
             //junta as duas caixas pelo ant e prox
-            cx1.setProx(cx2);
-            cx2.setAnt(cx1);
+            node1.setProx(node2);
+            node2.setAnt(node1);
 
             if (pai == folha) //ligando as folhas nas caixas
             {
-                folha.setInfo(0, cx2.getInfo(0));
+                folha.setInfo(0, node2.getInfo(0));
                 folha.setTl(1);
-                folha.setLig(0, cx1);
-                folha.setLig(1, cx2);
+                folha.setLig(0, node1);
+                folha.setLig(1, node2);
             } else //pai não é folha
             {
-                pos = buscaPosicao(pai, cx2.getInfo(0));
+                pos = buscaPosicao(pai, node2.getInfo(0));
                 remanejar(pai, pos);
-                pai.setInfo(pos, cx2.getInfo(0));
+                pai.setInfo(pos, node2.getInfo(0));
                 pai.setTl(pai.getTl() + 1);
-                pai.setLig(pos, cx1);
-                pai.setLig(pos + 1, cx2);
+                pai.setLig(pos, node1);
+                pai.setLig(pos + 1, node2);
 
                 if (pos > 0) {
-                    vizinhoEsq = pai.getLig(pos - 1);
-                    vizinhoEsq.setProx(cx1);
-                    cx1.setAnt(vizinhoEsq);
+                    leftNode = pai.getLig(pos - 1);
+                    leftNode.setProx(node1);
+                    node1.setAnt(leftNode);
                 }
                 if (pos < pai.getTl() - 1) {
-                    vizinhoDir = pai.getLig(pos + 1);
-                    vizinhoDir.setAnt(cx2);
-                    cx2.setProx(vizinhoDir);
+                    rightNode = pai.getLig(pos + 1);
+                    rightNode.setAnt(node2);
+                    node2.setProx(rightNode);
                 }
             }
         } else // não é folha
         {
-            calculoDistribuicao = Math.round((float) N / 2) - 1;
+            poscentro = Math.round((float) N / 2) - 1;
 
-            for (int i = 0; i < calculoDistribuicao; i++) {
-                cx1.setInfo(i, folha.getInfo(i));
-                cx1.setLig(i, folha.getLig(i));
+            for (int i = 0; i < poscentro; i++) {
+                node1.setInfo(i, folha.getInfo(i));
+                node1.setLig(i, folha.getLig(i));
             }
-            cx1.setLig(calculoDistribuicao, folha.getLig(calculoDistribuicao));
-            cx1.setTl(calculoDistribuicao);
+            node1.setLig(poscentro, folha.getLig(poscentro));
+            node1.setTl(poscentro);
 
-            for (int i = calculoDistribuicao + 1; i < folha.getTl(); i++) {
-                cx2.setInfo(i - (calculoDistribuicao + 1), folha.getInfo(i));
-                cx2.setLig(i - (calculoDistribuicao + 1), folha.getLig(i));
+            for (int i = poscentro + 1; i < folha.getTl(); i++) {
+                node2.setInfo(i - (poscentro + 1), folha.getInfo(i));
+                node2.setLig(i - (poscentro + 1), folha.getLig(i));
             }
-            cx2.setLig(folha.getTl() - (calculoDistribuicao + 1), folha.getLig(folha.getTl()));
-            cx2.setTl(folha.getTl() - (calculoDistribuicao + 1));
+            node2.setLig(folha.getTl() - (poscentro + 1), folha.getLig(folha.getTl()));
+            node2.setTl(folha.getTl() - (poscentro + 1));
 
-            folha.setInfo(0, folha.getInfo(calculoDistribuicao));
+            folha.setInfo(0, folha.getInfo(poscentro));
             folha.setTl(1);
-            folha.setLig(0, cx1);
-            folha.setLig(1, cx2);
+            folha.setLig(0, node1);
+            folha.setLig(1, node2);
         }
         if (pai.getTl() > NINFO) {
             folha = pai;
